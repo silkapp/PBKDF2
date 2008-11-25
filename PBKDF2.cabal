@@ -1,0 +1,22 @@
+Name: PBKDF2
+Version: 0.1
+License: BSD3
+License-file: bsd3.txt
+Description: Implemeentation of Password Based Key Derivation Function, from RSA labs. 
+             (I'm not 100% sure about that acroynym.)
+             I'll deprecate this if it's adopted into the Crypto package.
+Synopsis: Make password-based security schemes more secure.
+Maintainer: Thomas Hartman <thomashartman1 at gmail>
+Author: Thomas Hartman 
+Stability: Beta
+Copyright: Copyright (c) 2008 Thomas Hartman
+Exposed-Modules: HAppS.Helpers,HAppS.Helpers.DirBrowse, HAppS.Helpers.HtmlOutput, HAppS.Helpers.HtmlOutput.Common, 
+                 HAppS.Helpers.HtmlOutput.Menu, HAppS.Helpers.ParseRequest,HAppS.Helpers.Redirect, 
+                 HAppS.Helpers.Security,
+                 HAppS.Server.CookieFixer
+                 
+Build-Depends: base, mtl, HAppS-Server, hscolour, filepath, directory, bytestring,
+               HStringTemplate, HStringTemplateHelpers, safe, MissingH, containers, parsec, Crypto, haskell98
+Category: Crypto
+Build-type: Simple
+
