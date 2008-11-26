@@ -1,17 +1,35 @@
 {-# LANGUAGE ScopedTypeVariables #-}
-module Crypto.PBKDF2 (pbkdf2) where
+module Crypto.PBKDF2 (pbkdf2, pbkdf2') where
 
-import qualified Data.ByteString as B
+import qualified Data.ByteString.Char8 as B
+import qualified Data.ByteString.Lazy as L
 import GHC.Word
 import Control.Monad (foldM)
 import Random
 import Data.Digest.SHA512 (hash)
 import Data.Word 
 import Data.Bits
+import Data.Binary
 
-pbkdf2 :: ([Word8] -> [Word8] -> [Word8]) -> Int -> [Word8] -> [Word8] -> Int -> Int -> [Word8] 
-pbkdf2 prf hlen pass salt cIters dklen 
-  | dklen > ( (2^32-1) * hlen) = error $ "pbkdf2, dklen : " ++ (show dklen)
+newtype Password = Password [Word8]
+newtype Salt = Salt [Word8]
+newtype HashedPass = HashedPass [Word8]
+  deriving Show
+{- | A reasonable default for rsa pbkdf2? Actually I'm not really sure, ask folk with more experience.
+
+> pbkdf2 = pbkdf2' prfSHA512 512 512 512
+-} 
+t = pbkdf2 ( Password . toWord8s $ "meh" ) ( Salt . toWord8s $ "moo" )
+pbkdf2 :: Password -> Salt -> HashedPass
+pbkdf2 = pbkdf2' prfSHA512 512 512 512
+
+{- | Password Based Key Derivation Function, from RSA labs.
+
+> pbkdf2' prf hlen cIters dklen (Password pass) (Salt salt) 
+-}
+pbkdf2' :: ([Word8] -> [Word8] -> [Word8]) -> Integer -> Integer -> Integer -> Password -> Salt -> HashedPass
+pbkdf2' prf hlen cIters dklen (Password pass) (Salt salt) 
+  | dklen > ( (2^32-1) * hlen) = error $ "pbkdf2, (dklen,hlen) : " ++ (show (dklen,hlen))
   | otherwise = 
     let --l,r :: Int
         l = ceiling $ (fromIntegral dklen) / (fromIntegral hlen )
@@ -19,25 +37,28 @@ pbkdf2 prf hlen pass salt cIters dklen
         ustream :: [Word8] -> [Word8] -> [[Word8]]
         ustream p s = let x = prf p s
                       in  x : ustream p x    
-        us :: Int -> [[Word8]]
-        us i = take cIters $ ustream pass ( salt `myor` (fourOctetEnc (intToFourWord8s i) ))
-        f :: [Word8] -> [Word8] -> Int -> Int -> [Word8]
+        --us :: Integer -> [[Word8]]
+        us i = take (fromIntegral cIters) $ ustream pass ( salt `myor` ((intToFourWord8s i) ))
+        --f :: [Word8] -> [Word8] -> Integer -> Integer -> [Word8]
         f pass salt cIters i = foldr1 myxor $ us i
         ts :: [[Word8]]
         ts = map (f pass salt cIters) ( [1..l] )
-    in take dklen . concat $ ts
+    in HashedPass . take (fromIntegral dklen) . concat $ ts
 
-intToFourWord8s :: Int -> [Word8]
-intToFourWord8s = undefined
+-- The spec says
+-- Here, INT (i) is a four-octet encoding of the integer i, most significant octet first.
+-- I'm reading from the right... is this the right thing?
+toWord8s x = L.unpack . encode $ x
 
--- fix later
--- what is this supposed to do?
-fourOctetEnc = id
+--intToFourWord8s :: Integer -> [Word8]
+intToFourWord8s i = let w8s =  toWord8s $ i
+                    in drop (length w8s -4) w8s
 
 myxor :: [Word8] -> [Word8] -> [Word8]
 myxor = zipWith xor 
 
 myor :: [Word8] -> [Word8] -> [Word8]
 myor = zipWith (.|.)
-prf :: [Word8] -> [Word8] -> IO [Word8]
-prf pass k = return . hash $ pass ++ k
+
+prfSHA512 :: [Word8] -> [Word8] -> [Word8]
+prfSHA512 x y = hash $ x ++ y
