@@ -4,8 +4,10 @@ See PKCS # 5 / RFC 2898 from rsa labs: and haskell cafe discussion on why passwo
 
 > http://www.ietf.org/rfc/rfc2898.txt 
 > http://groups.google.com/group/fa.haskell/browse_thread/thread/66c7aeeb6e47764a/b15d9d74d68c002c
+
+> hashedpass = pbkdf2 ( Password . toOctets $ "password" ) ( Salt . toOctets $ "salt" )
 -}
-module Crypto.PBKDF2 (pbkdf2, pbkdf2') where
+module Crypto.PBKDF2 (pbkdf2, pbkdf2', Password(..), Salt(..), HashedPass(..),toOctets ) where
 
 import qualified Data.ByteString.Char8 as B
 import qualified Data.ByteString.Lazy as L
@@ -18,12 +20,14 @@ import Data.Bits
 import Data.Binary
 
 newtype Password = Password [Word8]
+  deriving (Read,Show,Ord,Eq)
 newtype Salt = Salt [Word8]
+  deriving (Read,Show,Ord,Eq)
 newtype HashedPass = HashedPass [Word8]
-  deriving Show
+  deriving (Read,Show,Ord,Eq)
 
 
-t = pbkdf2 ( Password . toWord8s $ "meh" ) ( Salt . toWord8s $ "moo" )
+
 
 {- | A reasonable default for rsa pbkdf2. 
 
@@ -71,13 +75,17 @@ pbkdf2' (prf,hlen) cIters dklen (Password pass) (Salt salt)
         ts = map (f pass salt cIters) ( [1..l] )
     in HashedPass . take (fromIntegral dklen) . concat $ ts
 
+toOctets :: (Binary a) => a -> [Word8]
+toOctets x = L.unpack . encode $ x
+
+fromOctets :: (Binary a) => [Word8] -> a
+fromOctets = decode . L.pack
+
 -- The spec says
 -- Here, INT (i) is a four-octet encoding of the integer i, most significant octet first.
--- I'm reading from the right... is this the right thing?
-toWord8s x = L.unpack . encode $ x
-
+-- I'm reading from the right, which I think is the right thing.
 --intToFourWord8s :: Integer -> [Word8]
-intToFourWord8s i = let w8s =  toWord8s $ i
+intToFourWord8s i = let w8s =  toOctets $ i
                     in drop (length w8s -4) w8s
 
 myxor :: [Word8] -> [Word8] -> [Word8]
@@ -95,4 +103,4 @@ output is always 64 bytes long
 prfSHA512 :: [Word8] -> [Word8] -> [Word8]
 prfSHA512 seed pass = hash $ seed ++ pass
 
-t2 = prfSHA512 (toWord8s "asdf") (toWord8s "jkl; asdfjl; asjdfnkl;ajsdfl;jk;sn")
+t2 = prfSHA512 (toOctets "asdf") (toOctets "jkl; asdfjl; asjdfnkl;ajsdfl;jk;sn")

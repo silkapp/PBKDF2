@@ -4,7 +4,7 @@ License: BSD3
 License-file: bsd3.txt
 Description: Implementation of Password-Based Key Derivation Function, aka pbkdf2, from RSA labs.
              http://tools.ietf.org/html/rfc2898#section-5.2
-             I'll deprecate this if it's adopted into the Crypto package.
+             I'll deprecate this if it gets folded into an already-existing crypto package.
              
 Synopsis: Make password-based security schemes more secure.
 Maintainer: Thomas Hartman <thomashartman1 at gmail>
