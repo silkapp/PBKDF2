@@ -1,8 +1,9 @@
 {- | Implementation of Password Based Key Derivation Function, from RSA labs. 
 
-See TK (rsa link) 
+See PKCS # 5 / RFC 2898 from rsa labs: and haskell cafe discussion on why password hashing is a good idea for web apps and a suggestion that this be implemented: 
 
-and TK (haskell cafe discussion)
+> http://www.ietf.org/rfc/rfc2898.txt 
+> http://groups.google.com/group/fa.haskell/browse_thread/thread/66c7aeeb6e47764a/b15d9d74d68c002c
 -}
 module Crypto.PBKDF2 (pbkdf2, pbkdf2') where
 
@@ -26,7 +27,7 @@ t = pbkdf2 ( Password . toWord8s $ "meh" ) ( Salt . toWord8s $ "moo" )
 
 {- | A reasonable default for rsa pbkdf2. 
 
-> pbkdf2 = pbkdf2' (prfSHA512,64) 1000 64
+> pbkdf2 = pbkdf2' (prfSHA512,64) 5000 64
 
 SHA512 outputs 64 bytes. At least 1000 iters is suggested by PKCS#5 (rsa link above). I chose 5000 because this takes my computer a little over a second to compute a simple key derivation (see t test function in source)
 
