@@ -7,7 +7,7 @@ See PKCS # 5 / RFC 2898 from rsa labs: and haskell cafe discussion on why passwo
 
 > hashedpass = pbkdf2 ( Password . toOctets $ "password" ) ( Salt . toOctets $ "salt" )
 -}
-module Crypto.PBKDF2 (pbkdf2, pbkdf2', Password(..), Salt(..), HashedPass(..),toOctets ) where
+module Crypto.PBKDF2 (pbkdf2, pbkdf2', Password(..), Salt(..), HashedPass(..),toOctets,fromOctets ) where
 
 import qualified Data.ByteString.Char8 as B
 import qualified Data.ByteString.Lazy as L
@@ -27,7 +27,7 @@ newtype HashedPass = HashedPass [Word8]
   deriving (Read,Show,Ord,Eq)
 
 
-
+t = pbkdf2 (Password . toOctets $ "blee") (Salt . toOctets $ "blah")
 
 {- | A reasonable default for rsa pbkdf2. 
 
