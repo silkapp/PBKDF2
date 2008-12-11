@@ -1,0 +1,66 @@
+Thomas Hartman wrote:
+> http://hackage.haskell.org/cgi-bin/hackage-scripts/package/PBKDF2
+>
+> Since no one took up my code review request I just did the best I
+
+> Also I'm open to folding this into a more established crypto package
+> if there are any takers... psst, dominic.
+
+I've now had chance to review this and it looks a reasonable function to
+include in the package. I'd love a patch. First a few comments:
+
+1. Experience has taught me that you need a few tests against known test
+vectors. If you look in the crypto package you will see there are
+several such test programs. You could either create your own or add to
+e.g. SymmetricTest (probably easiest).
+
+Thomas notes: tests for pbkdf2 are in rfc 3692, and steinitz is right, I should do this. 
+
+
+>>> pbkdf2' :: ([Word8] -> [Word8] -> [Word8]) -> Integer -> Integer ->
+>>> Integer -> Password -> Salt -> HashedPass
+
+2. Any reason for the arguments being in a different order to that in
+the spec?
+
+
+
+
+
+>>> -- The spec says
+>>> -- Here, INT (i) is a four-octet encoding of the integer i, most
+>>> significant octet first.
+>>> -- I'm reading from the right... is this the right thing?
+
+3. I don't know but some known test vectors will almost certainly flush
+this out.
+
+
+
+
+
+
+>>> toWord8s x = L.unpack . encode $ x
+>>>
+
+4. Is there a guarantee that encode (I assume from Binary) does what is
+required? I think you are guaranteed that encode . decode == id but I
+don't know if any guarantee is made about the actual encoding (I haven't
+checked by the way).
+
+
+
+
+
+
+
+>>> --intToFourWord8s :: Integer -> [Word8]
+>>> intToFourWord8s i = let w8s =  toWord8s $ i
+>>>                    in drop (length w8s -4) w8s
+
+5. This looks slightly suspicious. It won't work in general. I assume
+you are sure that it is only ever used for the correctly sized Integers?
+
+Thanks for your contribution, Dominic.
+
+
