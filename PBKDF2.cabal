@@ -10,14 +10,18 @@ Maintainer: Thomas Hartman <thomashartman1 at gmail>
 Author: Thomas Hartman 
 Stability: Beta
 Copyright: Copyright (c) 2008 Thomas Hartman
-Exposed-Modules: Crypto.PBKDF2
 Category: Cryptography
 Build-type: Simple
 Cabal-version: >= 1.6
-Build-Depends: base == 4.*, 
-               bytestring, 
-               Crypto, 
-               haskell98, 
-               binary
+
+Library
+  Build-Depends: base == 4.*, 
+                 bytestring, 
+                 Crypto, 
+                 haskell98, 
+                 binary
+  Exposed-Modules: Crypto.PBKDF2
+
+
 
 
