@@ -1,3 +1,4 @@
+{-# LANGUAGE DeriveDataTypeable #-}
 {- | Implementation of Password Based Key Derivation Function, from RSA labs. 
 
 See PKCS # 5 / RFC 2898 from rsa labs: and haskell cafe discussion on why password hashing is a good idea for web apps and a suggestion that this be implemented: 
@@ -11,6 +12,8 @@ module Crypto.PBKDF2 (pbkdf2, pbkdf2', Password(..), Salt(..), HashedPass(..),to
 
 import qualified Data.ByteString.Char8 as B
 import qualified Data.ByteString.Lazy as L
+import Data.Data (Data)
+import Data.Typeable (Typeable)
 import GHC.Word
 import Control.Monad (foldM)
 import Random
@@ -20,11 +23,11 @@ import Data.Bits
 import Data.Binary
 
 newtype Password = Password [Word8]
-  deriving (Read,Show,Ord,Eq)
+  deriving (Read,Show,Ord,Eq,Data,Typeable)
 newtype Salt = Salt [Word8]
-  deriving (Read,Show,Ord,Eq)
+  deriving (Read,Show,Ord,Eq,Data,Typeable)
 newtype HashedPass = HashedPass [Word8]
-  deriving (Read,Show,Ord,Eq)
+  deriving (Read,Show,Ord,Eq,Data,Typeable)
 
 
 t = pbkdf2 (Password . toOctets $ "blee") (Salt . toOctets $ "blah")
