@@ -18,8 +18,8 @@ Library
   Build-Depends: base == 4.*, 
                  bytestring, 
                  Crypto, 
-                 haskell98, 
-                 binary
+                 binary,
+                 random
   Exposed-Modules: Crypto.PBKDF2
 
 

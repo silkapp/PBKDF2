@@ -16,7 +16,7 @@ import Data.Data (Data)
 import Data.Typeable (Typeable)
 import GHC.Word
 import Control.Monad (foldM)
-import Random
+import System.Random
 import Data.Digest.SHA512 (hash)
 import Data.Word 
 import Data.Bits
