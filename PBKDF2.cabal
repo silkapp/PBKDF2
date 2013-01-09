@@ -6,7 +6,7 @@ Description: Implementation of Password-Based Key Derivation Function, aka pbkdf
              I'll deprecate this if it gets folded into an already-existing crypto package.
 
 Synopsis: Make password-based security schemes more secure.
-Maintainer: Thomas Hartman <thomashartman1 at gmail>
+Maintainer: Silk <code@silkapp.com>
 Author: Thomas Hartman
 Stability: Beta
 Copyright: Copyright (c) 2008 Thomas Hartman
