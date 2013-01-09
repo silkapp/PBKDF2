@@ -4,10 +4,10 @@ License: BSD3
 License-file: bsd3.txt
 Description: Implementation of Password-Based Key Derivation Function, aka pbkdf2, from RSA labs.
              I'll deprecate this if it gets folded into an already-existing crypto package.
-             
+
 Synopsis: Make password-based security schemes more secure.
 Maintainer: Thomas Hartman <thomashartman1 at gmail>
-Author: Thomas Hartman 
+Author: Thomas Hartman
 Stability: Beta
 Copyright: Copyright (c) 2008 Thomas Hartman
 Category: Cryptography
@@ -15,13 +15,9 @@ Build-type: Simple
 Cabal-version: >= 1.6
 
 Library
-  Build-Depends: base == 4.*, 
-                 bytestring, 
-                 Crypto, 
+  Build-Depends: base == 4.*,
+                 bytestring,
+                 Crypto,
                  binary,
                  random
   Exposed-Modules: Crypto.PBKDF2
-
-
-
-
