@@ -21,3 +21,7 @@ Library
                  binary,
                  random
   Exposed-Modules: Crypto.PBKDF2
+
+Source-Repository head
+  Type: git
+  Location: http://github.com/silkapp/PBKDF2
