@@ -26,7 +26,7 @@ newtype HashedPass = HashedPass [Word8]
   deriving (Read,Show,Ord,Eq,Data,Typeable)
 
 
-t = pbkdf2 (Password . toOctets $ "blee") (Salt . toOctets $ "blah")
+-- t = pbkdf2 (Password . toOctets $ "blee") (Salt . toOctets $ "blah")
 
 {- | A reasonable default for rsa pbkdf2.
 
@@ -102,4 +102,4 @@ output is always 64 bytes long
 prfSHA512 :: [Word8] -> [Word8] -> [Word8]
 prfSHA512 seed pass = hash $ seed ++ pass
 
-t2 = prfSHA512 (toOctets "asdf") (toOctets "jkl; asdfjl; asjdfnkl;ajsdfl;jk;sn")
+-- t2 = prfSHA512 (toOctets "asdf") (toOctets "jkl; asdfjl; asjdfnkl;ajsdfl;jk;sn")
