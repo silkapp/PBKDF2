@@ -1,9 +1,9 @@
 {-# LANGUAGE DeriveDataTypeable #-}
-{- | Implementation of Password Based Key Derivation Function, from RSA labs. 
+{- | Implementation of Password Based Key Derivation Function, from RSA labs.
 
-See PKCS # 5 / RFC 2898 from rsa labs: and haskell cafe discussion on why password hashing is a good idea for web apps and a suggestion that this be implemented: 
+See PKCS # 5 / RFC 2898 from rsa labs: and haskell cafe discussion on why password hashing is a good idea for web apps and a suggestion that this be implemented:
 
-> http://www.ietf.org/rfc/rfc2898.txt 
+> http://www.ietf.org/rfc/rfc2898.txt
 > http://groups.google.com/group/fa.haskell/browse_thread/thread/66c7aeeb6e47764a/b15d9d74d68c002c
 
 > hashedpass = pbkdf2 ( Password . toOctets $ "password" ) ( Salt . toOctets $ "salt" )
@@ -32,7 +32,7 @@ newtype HashedPass = HashedPass [Word8]
 
 t = pbkdf2 (Password . toOctets $ "blee") (Salt . toOctets $ "blah")
 
-{- | A reasonable default for rsa pbkdf2. 
+{- | A reasonable default for rsa pbkdf2.
 
 > pbkdf2 = pbkdf2' (prfSHA512,64) 5000 64
 
@@ -41,8 +41,8 @@ SHA512 outputs 64 bytes. At least 1000 iters is suggested by PKCS#5 (rsa link ab
 Dklen of 64 seemed reasonable to me: if this is being stored in a database, doesn't take too much space.
 
 Computational barriers can be raised by increasing number of iters
--} 
---sha512 generates 64-element octet lists, so set hlen to 64. 
+-}
+--sha512 generates 64-element octet lists, so set hlen to 64.
 -- not sure if this is correct. does hlen refer to length in bytes or bits?
 pbkdf2 :: Password -> Salt -> HashedPass
 pbkdf2 = pbkdf2' (prfSHA512,64) 5000 64
@@ -50,7 +50,7 @@ pbkdf2 = pbkdf2' (prfSHA512,64) 5000 64
 
 {- | Password Based Key Derivation Function, from RSA labs.
 
-> pbkdf2' (prf,hlen) cIters dklen (Password pass) (Salt salt) 
+> pbkdf2' (prf,hlen) cIters dklen (Password pass) (Salt salt)
 
 prf: pseudo random function
 
@@ -92,7 +92,7 @@ intToFourWord8s i = let w8s =  toOctets $ i
                     in drop (length w8s -4) w8s
 
 myxor :: [Word8] -> [Word8] -> [Word8]
-myxor = zipWith xor 
+myxor = zipWith xor
 
 myor :: [Word8] -> [Word8] -> [Word8]
 myor = zipWith (.|.)
