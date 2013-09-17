@@ -10,15 +10,11 @@ See PKCS # 5 / RFC 2898 from rsa labs: and haskell cafe discussion on why passwo
 -}
 module Crypto.PBKDF2 (pbkdf2, pbkdf2', Password(..), Salt(..), HashedPass(..),toOctets,fromOctets ) where
 
-import qualified Data.ByteString.Char8 as B
 import qualified Data.ByteString.Lazy as L
 import Data.Data (Data)
 import Data.Typeable (Typeable)
 import GHC.Word
-import Control.Monad (foldM)
-import System.Random
 import Data.Digest.SHA512 (hash)
-import Data.Word 
 import Data.Bits
 import Data.Binary
 
