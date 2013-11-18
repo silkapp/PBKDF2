@@ -8,7 +8,7 @@ Description:        Implementation of Password-Based Key Derivation
                     crypto package.
 
 Synopsis:           Make password-based security schemes more secure.
-Maintainer:         Silk <code@silkapp.com>
+Maintainer:         Silk <code@silk.co>
 Author:             Thomas Hartman
 Stability:          Beta
 Copyright:          Copyright (c) 2008 Thomas Hartman
